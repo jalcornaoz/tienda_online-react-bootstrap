@@ -13,16 +13,16 @@ export default function PageProduct() {
   console.log(product);
   return (
     <div>
-      <h2>{product.product.productDisplayName}</h2>
-      <p>{product.masterCategory}</p>
-      <p>{product.subCategory}</p>
-      <p>{product.articuloType}</p>
-      <p>{product.baseColor}</p>
-      <p>{product.season}</p>
-      <p>{product.year}</p>
-      <p>{product.usage}</p>
-      <p>{product.price}</p>
-      <p>{product.gender}</p>
+      <h2>{product.productDisplayName}</h2>
+      <p><b>Categoria:</b> {product.masterCategory}</p>
+      <p><b>Subcategoria:</b> {product.subCategory}</p>
+      <p><b>Genero:</b> {product.gender}</p>
+      <p><b>Tipo:</b> {product.articleType}</p>
+      <p><b>Color:</b> {product.baseColour}</p>
+      <p><b>Temporada:</b> {product.season}</p>
+      <p><b>Año:</b> {product.year}</p>
+      <p><b>Uso:</b> {product.usage}</p>
+      <p><b>Precio:</b> {product.price}</p>
     </div>
   );
 }
