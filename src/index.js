@@ -4,9 +4,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.scss";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
-import Products from "./pages/Products";
 import Contact from "./pages/Contact";
-import PageProduct from "./pages/PageProduct";
+import Products from "./pages/Products";
+import Product from "./pages/Product";
 import reportWebVitals from "./reportWebVitals";
 
 const router = createBrowserRouter([
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
       },
       {
         path: "products/:id",
-        element: <PageProduct />,
+        element: <Product />,
       },
     ],
   },
