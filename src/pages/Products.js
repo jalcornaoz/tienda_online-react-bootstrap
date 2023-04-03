@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProductTable from "../components/ProductTable";
 //import { useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import OptionList from "../components/OptionList";
 
 let uniqueCategories;
 
 export default function Products() {
-  //let location = useLocation();
   let { category: defaultCategory, subcategory: defaultSubcategory } =
     useParams();
-  //const defaultCategory = location?.state?.category || "";
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState(defaultCategory);
   const [subcategory, setSubcategory] = useState(defaultSubcategory);
@@ -25,15 +25,21 @@ export default function Products() {
     //.catch((error)=>)
   }, []);
 
+  useEffect(() => {
+    setCategory(defaultCategory);
+    setSubcategory(defaultSubcategory);
+  }, [defaultCategory, defaultSubcategory]);
+
   if (products.length === 0) {
     return <div>Cargando...</div>;
   }
 
   const selectCategory = (e) => {
-    setCategory(e.target.innerText);
-    setSubcategory("");
+    navigate(`/products/${e.target.innerText}`);
   };
-  const selectSubcategory = (e) => setSubcategory(e.target.innerText);
+  const selectSubcategory = (e) => {
+    navigate(`/products/${category}/${e.target.innerText}`);
+  };
 
   const uniqueSubcategories = [
     ...new Set(
@@ -42,7 +48,6 @@ export default function Products() {
         .map((product) => product.subCategory)
     ),
   ];
-  console.log(uniqueSubcategories);
 
   const filterProducts = products
     .filter((product) => product.masterCategory === category)
@@ -68,8 +73,7 @@ export default function Products() {
           <h2>{subcategory}</h2>
         </div>
       )}
-
-      <ProductTable products={products && filterProducts} />
+      {subcategory && <ProductTable products={products && filterProducts} />}
     </>
   );
 }

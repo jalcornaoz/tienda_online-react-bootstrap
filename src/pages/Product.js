@@ -31,31 +31,40 @@ export default function PageProduct() {
     subCategory,
   } = product;
   return (
-    <Card style={{ width: "30rem" }}>
-      <Card.Img
-        variant="top"
-        src={`https://juanda.certweb.infenlaces.com/images/${productID}.jpg`}
-      />
-      <Card.Body>
-        <Card.Title>{name}</Card.Title>
-        <Card.Text>
-          <b>Genero:</b> {gender}
-          <b>Tipo:</b> {type}
-          <b>Color:</b> {colour}
-          <b>Temporada:</b> {season}
-          <b>Año:</b> {year}
-          <b>Uso:</b> {usage}
-          <b>Precio:</b> {price}€
-        </Card.Text>
-        {/* <LinkContainer to="/products" state={{ category: category }}> */}
-        <LinkContainer to={`/products/${category}`}>
-          <Card.Link>{category}</Card.Link>
-        </LinkContainer>
-        <LinkContainer to={`/products/${category}/${subCategory}`}>
-          <Card.Link>{subCategory}</Card.Link>
-        </LinkContainer>
-      </Card.Body>
-      <Button variant="primary">Comprar</Button>
-    </Card>
+    <>
+      <h1>Producto</h1>
+      <Card style={{ width: "30rem" }}>
+        <Card.Img
+          variant="top"
+          src={`https://juanda.certweb.infenlaces.com/images/${productID}.jpg`}
+        />
+        <Card.Body>
+          <Card.Title>{name}</Card.Title>
+          <Card.Text>
+            <b>Genero:</b> {gender}
+            <br />
+            <b>Tipo:</b> {type}
+            <br />
+            <b>Color:</b> {colour}
+            <br />
+            <b>Temporada:</b> {season}
+            <br />
+            <b>Año:</b> {year}
+            <br />
+            <b>Uso:</b> {usage}
+            <br />
+            <b>Precio:</b> {price}€
+          </Card.Text>
+          {/* <LinkContainer to="/products" state={{ category: category }}> */}
+          <LinkContainer to={`/products/${category}`}>
+            <Card.Link>{category}</Card.Link>
+          </LinkContainer>
+          <LinkContainer to={`/products/${category}/${subCategory}`}>
+            <Card.Link>{subCategory}</Card.Link>
+          </LinkContainer>
+        </Card.Body>
+        <Button variant="primary">Comprar</Button>
+      </Card>
+    </>
   );
 }
