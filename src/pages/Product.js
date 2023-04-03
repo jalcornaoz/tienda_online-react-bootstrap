@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import { LinkContainer } from "react-router-bootstrap";
 
 export default function PageProduct() {
   const [product, setProduct] = useState(null);
@@ -14,36 +17,45 @@ export default function PageProduct() {
   if (!product) {
     return <div>Cargando...</div>;
   }
+
+  const {
+    productDisplayName: name,
+    price,
+    gender,
+    articleType: type,
+    baseColour: colour,
+    season,
+    year,
+    usage,
+    masterCategory: category,
+    subCategory,
+  } = product;
   return (
-    <div>
-      <h2>{product.productDisplayName}</h2>
-      <p>
-        <b>Categoria:</b> {product.masterCategory}
-      </p>
-      <p>
-        <b>Subcategoria:</b> {product.subCategory}
-      </p>
-      <p>
-        <b>Genero:</b> {product.gender}
-      </p>
-      <p>
-        <b>Tipo:</b> {product.articleType}
-      </p>
-      <p>
-        <b>Color:</b> {product.baseColour}
-      </p>
-      <p>
-        <b>Temporada:</b> {product.season}
-      </p>
-      <p>
-        <b>Año:</b> {product.year}
-      </p>
-      <p>
-        <b>Uso:</b> {product.usage}
-      </p>
-      <p>
-        <b>Precio:</b> {product.price}
-      </p>
-    </div>
+    <Card style={{ width: "30rem" }}>
+      <Card.Img
+        variant="top"
+        src={`https://juanda.certweb.infenlaces.com/images/${productID}.jpg`}
+      />
+      <Card.Body>
+        <Card.Title>{name}</Card.Title>
+        <Card.Text>
+          <b>Genero:</b> {gender}
+          <b>Tipo:</b> {type}
+          <b>Color:</b> {colour}
+          <b>Temporada:</b> {season}
+          <b>Año:</b> {year}
+          <b>Uso:</b> {usage}
+          <b>Precio:</b> {price}€
+        </Card.Text>
+        {/* <LinkContainer to="/products" state={{ category: category }}> */}
+        <LinkContainer to={`/products/${category}`}>
+          <Card.Link>{category}</Card.Link>
+        </LinkContainer>
+        <LinkContainer to={`/products/${category}/${subCategory}`}>
+          <Card.Link>{subCategory}</Card.Link>
+        </LinkContainer>
+      </Card.Body>
+      <Button variant="primary">Comprar</Button>
+    </Card>
   );
 }
