@@ -3,18 +3,15 @@ import axios from "axios";
 import ProductTable from "../components/ProductTable";
 //import { useLocation } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
-import OptionList from "../components/OptionList";
+import OptionGrid from "../components/OptionGrid";
 
 let uniqueCategories;
 
 export default function Products() {
-  let { category: defaultCategory, subcategory: defaultSubcategory } =
-    useParams();
+  let { category, subcategory } = useParams();
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState(defaultCategory);
-  const [subcategory, setSubcategory] = useState(defaultSubcategory);
+  const [products, setProducts] = useState();
 
   useEffect(() => {
     axios.get("http://localhost:3006/products").then(({ data }) => {
@@ -25,12 +22,7 @@ export default function Products() {
     //.catch((error)=>)
   }, []);
 
-  useEffect(() => {
-    setCategory(defaultCategory);
-    setSubcategory(defaultSubcategory);
-  }, [defaultCategory, defaultSubcategory]);
-
-  if (products.length === 0) {
+  if (!products) {
     return <div>Cargando...</div>;
   }
 
@@ -55,25 +47,48 @@ export default function Products() {
   return (
     <>
       <h1>Productos</h1>
-      <p>Elija una categoría para ver las subcategorías:</p>
-      <OptionList
-        title="Categoría"
-        items={uniqueCategories}
-        onClick={selectCategory}
-      />
-      <h2>{category}</h2>
+      <p>Selecciona alguna categoría para ver nuestros productos:</p>
+      {!category && (
+        <OptionGrid
+          items={uniqueCategories}
+          defaultItem={category}
+          onClick={selectCategory}
+        />
+      )}
       {category && (
-        <div>
-          <p>Elija una subcategoría para ver los productos:</p>
-          <OptionList
-            title="Subcategoría"
+        <>
+          <p>Selecciona alguna subcategoría para ver nuestros productos:</p>
+          <OptionGrid
             items={uniqueSubcategories}
+            defaultItem={subcategory}
             onClick={selectSubcategory}
           />
-          <h2>{subcategory}</h2>
-        </div>
+        </>
       )}
-      {subcategory && <ProductTable products={products && filterProducts} />}
+
+      {category && subcategory && <ProductTable products={filterProducts} />}
     </>
+    // <>
+    //   <h1>Productos</h1>
+    //   <p>Elija una categoría para ver las subcategorías:</p>
+    //   <OptionList
+    //     title="Categoría"
+    //     items={uniqueCategories}
+    //     onClick={selectCategory}
+    //   />
+    //   <h2>{category}</h2>
+    //   {category && (
+    //     <div>
+    //       <p>Elija una subcategoría para ver los productos:</p>
+    //       <OptionList
+    //         title="Subcategoría"
+    //         items={uniqueSubcategories}
+    //         onClick={selectSubcategory}
+    //       />
+    //       <h2>{subcategory}</h2>
+    //     </div>
+    //   )}
+    //   {subcategory && <ProductTable products={products && filterProducts} />}
+    // </>
   );
 }
