@@ -15,8 +15,16 @@ export default function Products() {
 
   useEffect(() => {
     axios.get("http://localhost:3006/products").then(({ data }) => {
-      const categories = data.map((product) => product.masterCategory);
-      uniqueCategories = [...new Set(categories)];
+      // const categories = data.map((product) => product.masterCategory);
+      // uniqueCategories = [...new Set(categories)];
+      uniqueCategories = data.reduce((acc, product) => {
+        const { masterCategory: category, id } = product;
+        const categoryExists = acc.find((item) => item.name === category);
+        if (!categoryExists) {
+          acc.push({ name: category, id });
+        }
+        return acc;
+      }, []);
       setProducts(data);
     });
     //.catch((error)=>)
@@ -27,46 +35,72 @@ export default function Products() {
   }
 
   const selectCategory = (e) => {
-    navigate(`/products/${e.target.innerText}`);
+    const category = e.target.innerText || e.target.alt;
+    navigate(`/products/${category}`);
   };
   const selectSubcategory = (e) => {
-    navigate(`/products/${category}/${e.target.innerText}`);
+    const subCategory = e.target.innerText || e.target.alt;
+    subCategory === "Volver"
+      ? navigate(`/products/`)
+      : navigate(`/products/${category}/${subCategory}`);
   };
 
-  const uniqueSubcategories = [
-    ...new Set(
-      products
-        .filter((product) => product.masterCategory === category)
-        .map((product) => product.subCategory)
-    ),
-  ];
+  const loadProduct = (e) => navigate(`/product/${e.target.id}`);
+
+  const uniqueSubcategories = products
+    .filter((product) => product.masterCategory === category)
+    .reduce((acc, product) => {
+      const { subCategory, id } = product;
+      const subCategoryExists = acc.find((item) => item.name === subCategory);
+      if (!subCategoryExists) {
+        acc.push({ name: subCategory, id });
+      }
+      return acc;
+    }, []);
 
   const filterProducts = products
     .filter((product) => product.masterCategory === category)
-    .filter((product) => product.subCategory === subcategory);
+    .filter((product) => product.subCategory === subcategory)
+    .map(({ productDisplayName: name, id, price }) => ({ name, id, price }));
   return (
     <>
       <h1>Productos</h1>
-      <p>Selecciona alguna categoría para ver nuestros productos:</p>
+
       {!category && (
-        <OptionGrid
-          items={uniqueCategories}
-          defaultItem={category}
-          onClick={selectCategory}
-        />
+        <>
+          <h5>Selecciona alguna categoría para ver nuestros productos:</h5>
+          <OptionGrid
+            items={uniqueCategories}
+            onClick={selectCategory}
+            goUp={false}
+          />
+        </>
       )}
       {category && (
         <>
-          <p>Selecciona alguna subcategoría para ver nuestros productos:</p>
+          <h3>Categoría: {category}</h3>
+          <h5>Selecciona alguna subcategoría para ver nuestros productos:</h5>
           <OptionGrid
             items={uniqueSubcategories}
-            defaultItem={subcategory}
+            itemDefault={subcategory}
             onClick={selectSubcategory}
+            goUp={true}
           />
         </>
       )}
 
-      {category && subcategory && <ProductTable products={filterProducts} />}
+      {/* {category && subcategory && <ProductTable products={filterProducts} />} */}
+      {category && subcategory && (
+        <>
+          <h3>Subcategoría: {subcategory}</h3>
+          <h5>Elige el producto:</h5>
+          <OptionGrid
+            items={filterProducts}
+            onClick={loadProduct}
+            goUp={false}
+          />
+        </>
+      )}
     </>
     // <>
     //   <h1>Productos</h1>
